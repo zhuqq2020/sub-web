@@ -1,5 +1,5 @@
 # sub-web
-
+Sub-web的自用版本docker地址：https://hub.docker.com/r/spgcc/subweb
 基于 vue-cli 与 [tindy2013/subconverter](https://github.com/tindy2013/subconverter) 后端实现的配置自动生成。
 
 ## Table of Contents
@@ -23,7 +23,7 @@
 ## Docker
 
 ```shell
-docker run -d -p 58080:80 --restart always --name subweb careywong/subweb:latest
+docker run -d -p 58080:80 --restart always --name subweb spgcc/subweb:latest
 ```
 
 若需要对代码进行修改，你需要在本地构建镜像并运行。
