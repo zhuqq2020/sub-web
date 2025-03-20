@@ -4,7 +4,7 @@
       <el-col>
         <el-card>
           <div slot="header">
-            Subscription Converter
+            Subscription Converter机场订阅格式转换器
             <svg-icon icon-class="github" style="margin-left: 20px" @click="goToProject" />
 
             <div style="display: inline-block; position:absolute; right: 20px">{{ backendVersion }}</div>
@@ -27,10 +27,16 @@
 
               <div v-if="advanced === '2'">
                 <el-form-item label="后端地址:">
-                  <el-autocomplete style="width: 100%" v-model="form.customBackend" :fetch-suggestions="backendSearch"
-                    placeholder="动动小手，（建议）自行搭建后端服务。例：http://127.0.0.1:25500/sub?">
-                    <el-button slot="append" @click="gotoGayhub" icon="el-icon-link">前往项目仓库</el-button>
-                  </el-autocomplete>
+                <el-select
+                    v-model="form.customBackend"
+                    allow-create
+                    filterable
+                    @change="selectChanged"
+                    placeholder="可输入自己的后端"
+                    style="width: 100%"
+                >
+                  <el-option v-for="(v, k) in options.customBackend" :key="k" :label="k" :value="v"></el-option>
+                </el-select>
                 </el-form-item>
                 <el-form-item label="远程配置:">
                   <el-select v-model="form.remoteConfig" allow-create filterable placeholder="请选择" style="width: 100%">
@@ -45,7 +51,7 @@
                   <el-input v-model="form.includeRemarks" placeholder="节点名包含的关键字，支持正则" />
                 </el-form-item>
                 <el-form-item label="Exclude:">
-                  <el-input v-model="form.excludeRemarks" placeholder="节点名不包含的关键字，支持正则" />
+                  <el-input v-model="form.excludeRemarks" placeholder="节点名不包含的关键字，支持正则" />正则示例:(?!)|群组|订阅|流量|官网|国外|用户|元|过期|到期|剩余|加入
                 </el-form-item>
                 <el-form-item label="FileName:">
                   <el-input v-model="form.filename" placeholder="返回的订阅文件名" />
@@ -232,8 +238,167 @@ export default {
           Trojan: "trojan",
           Surge3: "surge&ver=3",
         },
-        backendOptions: [{ value: "http://127.0.0.1:25500/sub?" }],
+        customBackend: {
+          "api.spg.pp.ua提供[https://api.spg.pp.ua/sub?]": "https://api.spg.pp.ua/sub?",
+          "api.88660088.xyz提供[https://api.88660088.xyz/sub?]": "https://api.88660088.xyz/sub?",
+          "局域网内部使用[http://10.0.0.1:25500/sub?]": "http://10.0.0.1:25500/sub?",
+          "OpenWRT内部使用[http://127.0.0.1:25500/sub?]": "http://127.0.0.1:25500/sub?",
+          "sub-web作者提供[https://api.wcc.best/sub?]": "https://api.wcc.best/sub?",
+          "sub作者&lhie1提供[https://api.dler.io/sub?]": "https://api.dler.io/sub?",
+          "sub.id9.cc提供[https://sub.id9.cc/sub?]": "https://sub.id9.cc/sub?",
+        },
+        backendOptions: [
+          {value: "https://api.spg.pp.ua/sub?"},
+          {value: "https://api.88660088.xyz/sub?"},
+          {value: "http://10.0.0.1:25500/sub?"},
+          {value: "http://127.0.0.1:25500/sub?"},
+          {value: "https://api.wcc.best/sub?"},
+          {value: "https://api.dler.io/sub?"},
+          {value: "https://sub.id9.cc/sub?"},
+        ],
         remoteConfig: [
+		
+		{
+    label: "ACL4SSR",
+    options: [
+        {
+            label: "ACL4SSR_Online 默认版 分组比较全 (与Github同步)",
+            value: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online.ini"
+        },
+
+        {
+            label: "ACL4SSR_Online_AdblockPlus 更多去广告 (与Github同步)",
+            value: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_AdblockPlus.ini"
+        },
+
+        {
+            label: "ACL4SSR_Online_NoAuto 无自动测速 (与Github同步)",
+            value:"https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_NoAuto.ini"
+        },
+
+        {
+            label: "ACL4SSR_Online_NoReject 无广告拦截规则 (与Github同步)",
+            value:"https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_NoReject.ini"
+        },
+
+        {
+            label: "ACL4SSR_Online_Mini 精简版 (与Github同步)",
+            value:"https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Mini.ini"
+      },
+
+      {
+            label: "ACL4SSR_Online_Mini_AdblockPlus.ini 精简版 更多去广告 (与Github同步)",
+            value:"https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Mini_AdblockPlus.ini"
+      },
+
+      {
+            label: "ACL4SSR_Online_Mini_NoAuto.ini 精简版 不带自动测速 (与Github同步)",
+            value:"https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Mini_NoAuto.ini"
+      },
+
+      {
+            label: "ACL4SSR_Online_Mini_Fallback.ini 精简版 带故障转移 (与Github同步)",
+            value:"https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Mini_Fallback.ini"
+      },
+
+      {
+            label: "ACL4SSR_Online_Mini_MultiMode.ini 精简版 自动测速、故障转移、负载均衡 (与Github同步)",
+            value:"https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Mini_MultiMode.ini"
+      },
+
+      {
+          label: "ACL4SSR_Online_Full 全分组 重度用户使用 (与Github同步)",
+          value:"https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Full.ini"
+      },
+
+      {
+          label: "ACL4SSR_Online_Full_TikTok 全分组 重度用户 使用增加TikTok分流 (与Github同步)",
+          value:"https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/refs/heads/ACL4SSR/ACL4SSR_Online_Full_TikTok.ini"
+      },
+
+      {
+          label: "ACL4SSR_Online_Full_NoAuto.ini 全分组 无自动测速 重度用户使用 (与Github同步)",
+          value:"https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Full_NoAuto.ini"
+      },
+
+      {
+          label: "ACL4SSR_Online_Full_AdblockPlus 全分组 重度用户使用 更多去广告 (与Github同步)",
+          value:"https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Full_AdblockPlus.ini"
+      },
+
+      {
+          label: "ACL4SSR_Online_Full_AdblockPlus_TikTok 全分组 重度用户使用 使用增加TikTok分流 更多去广告 (与Github同步)",
+          value:"https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/refs/heads/ACL4SSR/ACL4SSR_Online_Full_AdblockPlus_TikTok.ini"
+      },
+
+      {
+          label: "ACL4SSR_Online_Full_Netflix 全分组 重度用户使用 奈飞全量 (与Github同步)",
+          value:"https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Full_Netflix.ini"
+      },
+
+      {
+          label: "ACL4SSR_Online_Full_Mannix 正则匹配大小写、简繁体，更好地匹配中转、IPLC节点 (与Github同步)",
+          value:"https://raw.githubusercontent.com/zsokami/ACL4SSR/main/ACL4SSR_Online_Full_Mannix.ini"
+      },
+
+
+      {
+          label: "ACL4SSR_Online_Full_Mannix_No_DNS_Leak 无 DNS 泄漏 (与Github同步)",
+          value:"https://raw.githubusercontent.com/zsokami/ACL4SSR/main/ACL4SSR_Online_Full_Mannix_No_DNS_Leak.ini"
+      },
+
+      {
+          label: "ACL4SSR 本地 默认版 分组比较全",
+          value: "config/ACL4SSR.ini"
+      },
+
+      {
+          label: "ACL4SSR_Mini 本地 精简版",
+          value: "config/ACL4SSR_Mini.ini"
+      },
+
+      {
+          label: "ACL4SSR_Mini_NoAuto.ini 本地 精简版+无自动测速",
+          value: "config/ACL4SSR_Mini_NoAuto.ini"
+      },
+
+      {
+          label: "ACL4SSR_Mini_Fallback.ini 本地 精简版+fallback",
+          value: "config/ACL4SSR_Mini_Fallback.ini"
+      },
+
+      {
+          label: "ACL4SSR_BackCN 本地 回国",
+          value: "config/ACL4SSR_BackCN.ini"
+      },
+
+      {
+          label: "ACL4SSR_NoApple 本地 无苹果分流",
+          value: "config/ACL4SSR_NoApple.ini"
+      },
+
+      {
+            label: "ACL4SSR_NoAuto 本地 无自动测速 ",
+            value: "config/ACL4SSR_NoAuto.ini"
+      },
+
+      {
+            label: "ACL4SSR_NoAuto_NoApple 本地 无自动测速&无苹果分流",
+            value: "config/ACL4SSR_NoAuto_NoApple.ini"
+      },
+
+      {
+            label: "ACL4SSR_NoMicrosoft 本地 无微软分流",
+            value: "config/ACL4SSR_NoMicrosoft.ini"
+      },
+
+      {
+            label: "ACL4SSR_WithGFW 本地 GFW列表",
+            value: "config/ACL4SSR_WithGFW.ini"
+      }
+    ]
+  },
+		
           {
             label: "universal",
             options: [
@@ -357,7 +522,7 @@ export default {
     };
   },
   created() {
-    document.title = "Subscription Converter";
+    document.title = "Subscription Converter机场订阅格式转换器";
     this.isPC = this.$getOS().isPc;
 
     // 获取 url cache
